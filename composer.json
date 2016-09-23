@@ -1,0 +1,27 @@
+{
+    "name": "ffogarasi/rocket-chat-api",
+    "type": "library",
+    "description": "Simple Rocket.Chat API client",
+    "homepage": "https://github.com/ffogarasi/rocket-chat-api.git",
+    "keywords": ["rocket.chat", "api"],
+    "license": "MIT",
+    "authors": [
+        {
+	    "name": "Fogarasi Ferenc",
+	    "email": "ffogarasi@gmail.com",
+	    "homepage":""
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "ext-curl": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "RocketChat": "lib/"
+        }
+    }
+}
