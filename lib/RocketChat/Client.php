@@ -159,9 +159,9 @@ class Client
      *
      * @return array
      */
-    public function get($path, $decode = true, $version = 1)
+    public function get($path, $decode = true)
     {
-        if (false === $json = $this->runRequest($path, $version, 'GET')) {
+        if (false === $json = $this->runRequest($path, 'GET')) {
             return false;
         }
 
@@ -203,9 +203,9 @@ class Client
      *
      * @return mixed
      */
-    public function post($path, $data, $version = 1)
+    public function post($path, $data)
     {
-        return $this->runRequest($path, $version, 'POST', $data);
+        return $this->runRequest($path, 'POST', $data);
     }
 
     /**
@@ -216,9 +216,9 @@ class Client
      *
      * @return array
      */
-    public function put($path, $data, $version = 1)
+    public function put($path, $data)
     {
-        return $this->runRequest($path, $version, 'PUT', $data);
+        return $this->runRequest($path, 'PUT', $data);
     }
 
     /**
@@ -228,9 +228,9 @@ class Client
      *
      * @return array
      */
-    public function delete($path, $version = 1)
+    public function delete($path)
     {
-        return $this->runRequest($path, $version, 'DELETE');
+        return $this->runRequest($path, 'DELETE');
     }
 
     /**
@@ -418,7 +418,7 @@ class Client
      *
      * @return resource a cURL handle on success, <b>FALSE</b> on errors.
      */
-    public function prepareRequest($path, $method = 'GET', $data = '', $version = 1)
+    public function prepareRequest($path, $method = 'GET', $data = '')
     {
         $this->responseCode = null;
         $this->curlOptions = array();
@@ -430,7 +430,7 @@ class Client
         $this->setCurlOption(CURLOPT_RETURNTRANSFER, 1);
 
         // Host and request options
-        $this->setCurlOption(CURLOPT_URL, $this->url."api/v{$version}".$path);
+        $this->setCurlOption(CURLOPT_URL, $this->url.'api/'.$path);
         $this->setCurlOption(CURLOPT_PORT, $this->getPort());
         if (80 !== $this->getPort()) {
             $this->setCurlOption(CURLOPT_SSL_VERIFYPEER, $this->checkSslCertificate);
@@ -510,9 +510,9 @@ class Client
      *
      * @return bool|SimpleXMLElement|string
      */
-    protected function runRequest($path, $version, $method = 'GET', $data = '')
+    protected function runRequest($path, $method = 'GET', $data = '')
     {
-        $curl = $this->prepareRequest($path, $method, $data, $version);
+        $curl = $this->prepareRequest($path, $method, $data);
         
         $response = trim(curl_exec($curl));
         $this->responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);

@@ -22,6 +22,6 @@ class User extends AbstractApi
      */
     public function login($username, $password)
     {
-        return $this->get('login', ['user'=>$username, 'password'=>$password]);
+        return $this->post('login', ['user'=>$username, 'password'=>$password]);
     }
 }
