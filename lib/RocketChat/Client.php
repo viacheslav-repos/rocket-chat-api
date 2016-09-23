@@ -90,7 +90,7 @@ class Client
 
     private $classes = array(
         'user' => 'User',
-        'chanell' => 'Channel',
+        'channel' => 'Channel',
     );
 
     /**
@@ -312,29 +312,6 @@ class Client
         return $this->sslVersion;
     }
 
-    /**
-     * Turns on/off http auth.
-     *
-     * @param bool $use
-     *
-     * @return Client
-     */
-    public function setUseHttpAuth($use = true)
-    {
-        $this->useHttpAuth = $use;
-
-        return $this;
-    }
-
-    /**
-     * Get the on/off flag for http auth.
-     *
-     * @return bool
-     */
-    public function getUseHttpAuth()
-    {
-        return $this->useHttpAuth;
-    }
 
     /**
      * Set the port of the connection.
@@ -425,10 +402,9 @@ class Client
         $curl = curl_init();
 
         // General cURL options
-        $this->setCurlOption(CURLOPT_VERBOSE, 1);
-        $this->setCurlOption(CURLOPT_HEADER, 1);
+        $this->setCurlOption(CURLOPT_VERBOSE, 0);
+        $this->setCurlOption(CURLOPT_HEADER, 0);
         $this->setCurlOption(CURLOPT_RETURNTRANSFER, 1);
-        $this->setCurlOption(CURLINFO_HEADER_OUT, true);
 
         // Host and request options
         $this->setCurlOption(CURLOPT_URL, $this->url.'api/'.$path);
@@ -496,10 +472,21 @@ class Client
     public function processCurlResponse($response, $contentType)
     {
         if ($response) {
+            if ($contentType == 'application/json')
+            {
+                return json_decode($response);
+            }
+
             return $response;
         }
 
         return false;
+    }
+
+    public function setToken($token_object)
+    {
+        $this->authToken = $token_object->authToken;
+        $this->authUserId = $token_object->userId;
     }
 
     /**
@@ -526,10 +513,8 @@ class Client
             curl_close($curl);
             throw $e;
         }
-        print_r(curl_getinfo($curl));
+
         curl_close($curl);
-
-
 
         return $this->processCurlResponse($response, $contentType);
     }

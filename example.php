@@ -5,15 +5,32 @@
  * This file holds example commands for reading, creating, updating and deleting redmine components.
  */
 
-// As this is only an example file, we make sure, this is not accidently executed and may destroy real
-// life content.
-return;
-
-require_once 'vendor/autoload.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require_once 'lib/autoload.php';
 
 // ----------------------------
 // Instanciate a redmine client
 // --> with ApiKey
-$client = new RocketChat\Client('http://chat.example.com');
+$client = new RocketChat\Client('http://chat.mydomain.com/');
 
-print_r($client->api('user')->login('me','mypassword'));
+$token = $client->api('user')->login('','');
+
+if ( $token)
+{
+    $client->setToken($token);
+
+    $channel_result = $client->api('channel')->create('first-channel-from-api-3');
+    if ($channel_result)
+    {
+        print_r($channel_result);
+        print_r($client->api('channel')->getMessage());
+    }
+    else
+    {
+        print_r($client->api('channel')->getMessage());
+    }
+}
+else {
+    print_r($client->api('user')->getMessage());
+}

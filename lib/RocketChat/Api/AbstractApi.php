@@ -7,7 +7,8 @@ use RocketChat\Client;
 /**
  * Abstract class for Api classes.
  *
- * @author Kevin Saliou <kevin at saliou dot name>
+ * @author Fogarasi Ferenc <ffogarasi at gmail dot com>
+ * Website: http://github.com/ffogarasi/rocket-chat-api
  */
 abstract class AbstractApi
 {
@@ -17,6 +18,11 @@ abstract class AbstractApi
      * @var Client
      */
     protected $client;
+
+    protected $status = false;
+    protected $message = false;
+
+    const SUCCESS = 'Success';
 
     /**
      * @param Client $client
@@ -47,7 +53,7 @@ abstract class AbstractApi
      */
     protected function get($path, $decode = true)
     {
-        return $this->client->get($path, $decode);
+        return $this->parseRequest($this->client->get($path, $decode));
     }
 
     /**
@@ -60,7 +66,7 @@ abstract class AbstractApi
      */
     protected function post($path, $data)
     {
-        return $this->client->post($path, $data);
+        return $this->parseRequest($this->client->post($path, $data));
     }
 
     /**
@@ -73,7 +79,7 @@ abstract class AbstractApi
      */
     protected function put($path, $data)
     {
-        return $this->client->put($path, $data);
+        return $this->parseRequest($this->client->put($path, $data));
     }
 
     /**
@@ -85,7 +91,7 @@ abstract class AbstractApi
      */
     protected function delete($path)
     {
-        return $this->client->delete($path);
+        return $this->parseRequest($this->client->delete($path));
     }
 
     /**
@@ -116,5 +122,35 @@ abstract class AbstractApi
             array_merge($defaults, $params),
             array($this, 'isNotNull')
         );
+    }
+
+    protected function parseRequest($result)
+    {
+        $this->status = false;
+
+        if ($result !== false)
+        {
+            if(
+                (isset($result->status) && $result->status == 'success') ||
+                (isset($result->success) && $result->success)
+            )
+            {
+                $this->message = self::SUCCESS;
+                $this->status = true;
+            }
+            else {
+                if ( isset($result->error))
+                {
+                    $this->message = $result->error;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getMessage()
+    {
+        return  $this->message;
     }
 }

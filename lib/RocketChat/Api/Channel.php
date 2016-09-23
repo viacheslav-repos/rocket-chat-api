@@ -3,29 +3,29 @@
 namespace RocketChat\Api;
 
 /**
- * Listing users, creating, editing, logging in and out.
+ * Listing users, creating, editing.
  *
  * @author Fogarasi Ferenc <ffogarasi at gmail dot com>
  * Website: http://github.com/ffogarasi/rocket-chat-api
  */
-class User extends AbstractApi
+class Channel extends AbstractApi
 {
 
     /**
-     * Returns tokens for user
+     * Returns tokens for .
      *
      * @param bool  $username the username of the user
      * @param array $password the password of the user
      *
      * @return user's auth token and userId
      */
-    public function login($username, $password)
+    public function create($name)
     {
-        $result = $this->post('login', ['user'=>$username, 'password'=>$password]);
+        $result = $this->post('v1/channels.create', ['name'=>$name]);
 
         if ($this->status)
         {
-            return $result->data;
+            return $result->channel;
         }
 
         return null;
