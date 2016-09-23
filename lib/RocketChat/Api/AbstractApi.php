@@ -1,8 +1,8 @@
 <?php
 
-namespace Redmine\Api;
+namespace RocketChat\Api;
 
-use Redmine\Client;
+use RocketChat\Client;
 
 /**
  * Abstract class for Api classes.

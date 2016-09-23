@@ -14,6 +14,6 @@ require_once 'vendor/autoload.php';
 // ----------------------------
 // Instanciate a redmine client
 // --> with ApiKey
-$client = new RocketChate\Client('http://chat.example.com');
+$client = new RocketChat\Client('http://chat.example.com');
 
 print_r($client->api('user')->login('me','mypassword'));
