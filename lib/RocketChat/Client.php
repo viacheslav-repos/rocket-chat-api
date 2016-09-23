@@ -425,9 +425,10 @@ class Client
         $curl = curl_init();
 
         // General cURL options
-        $this->setCurlOption(CURLOPT_VERBOSE, 0);
-        $this->setCurlOption(CURLOPT_HEADER, 0);
+        $this->setCurlOption(CURLOPT_VERBOSE, 1);
+        $this->setCurlOption(CURLOPT_HEADER, 1);
         $this->setCurlOption(CURLOPT_RETURNTRANSFER, 1);
+        $this->setCurlOption(CURLINFO_HEADER_OUT, true);
 
         // Host and request options
         $this->setCurlOption(CURLOPT_URL, $this->url.'api/'.$path);
@@ -440,11 +441,8 @@ class Client
 
         // Additional request headers
         $httpHeader = array(
-            'Expect: ',
+            'Content-Type: application/x-www-form-urlencoded'
         );
-
-        // Content type headers
-	$httpHeader[] = 'Content-Type: application/json';
 
         if ($this->authToken && $this->authUserId) {
             $httpHeader[] = 'X-Auth-Token: '.$this->authToken;
@@ -453,6 +451,11 @@ class Client
 
         // Set the HTTP request headers
         $this->setCurlOption(CURLOPT_HTTPHEADER, $httpHeader);
+
+        if (isset($data))
+        {
+            $data = http_build_query($data);
+        }
 
         switch ($method) {
             case 'POST':
@@ -523,7 +526,10 @@ class Client
             curl_close($curl);
             throw $e;
         }
+        print_r(curl_getinfo($curl));
         curl_close($curl);
+
+
 
         return $this->processCurlResponse($response, $contentType);
     }
