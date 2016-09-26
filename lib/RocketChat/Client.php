@@ -184,7 +184,7 @@ class Client
      */
     public function decode($json)
     {
-        $decoded = json_decode($json, true);
+        $decoded = $json instanceof \stdClass ? $json : json_decode($json, true);
         if (null !== $decoded) {
             return $decoded;
         }
@@ -395,7 +395,7 @@ class Client
      *
      * @return resource a cURL handle on success, <b>FALSE</b> on errors.
      */
-    public function prepareRequest($path, $method = 'GET', $data = '')
+    public function prepareRequest($path, $method = 'GET', $data = array())
     {
         $this->responseCode = null;
         $this->curlOptions = array();
@@ -500,7 +500,7 @@ class Client
      *
      * @return bool|SimpleXMLElement|string
      */
-    protected function runRequest($path, $method = 'GET', $data = '')
+    protected function runRequest($path, $method = 'GET', $data = array())
     {
         $curl = $this->prepareRequest($path, $method, $data);
         

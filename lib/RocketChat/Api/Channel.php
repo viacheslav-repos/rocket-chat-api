@@ -31,14 +31,51 @@ class Channel extends AbstractApi
         return null;
     }
 
+    public function publicRooms()
+    {
+        $result = $this->get('publicRooms');
+
+        if ($this->status)
+        {
+            return $result;
+        }
+
+        return null;
+    }
+
+    public function findByName($name)
+    {
+        $result = $this->publicRooms();
+        if ($result)
+        {
+            foreach($result->rooms as $room)
+            {
+                if ($room->name == $name)
+                {
+                    return $room;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /*
+     * implement when api is ready
+     */
+    public function setArchived($id, $state)
+    {
+        return true;
+    }
+
     public function createBulk($rooms)
     {
-	  $result = $this->post('bulk/createRoom', ['rooms' => $rooms]);
+        $result = $this->post('bulk/createRoom', ['rooms' => $rooms]);
 
-	  if ($this->status)
-	  {
-	      return $result;
-	  }
+        if ($this->status)
+        {
+            return $result;
+        }
 
         return null;
     }
