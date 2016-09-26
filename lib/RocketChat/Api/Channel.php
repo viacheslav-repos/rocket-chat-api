@@ -19,9 +19,9 @@ class Channel extends AbstractApi
      *
      * @return user's auth token and userId
      */
-    public function create($name)
+    public function create($name,$usernames=array())
     {
-        $result = $this->post('v1/channels.create', ['name'=>$name]);
+        $result = $this->post('v1/channels.create', ['name'=>$name, 'usernames' => $usernames]);
 
         if ($this->status)
         {
