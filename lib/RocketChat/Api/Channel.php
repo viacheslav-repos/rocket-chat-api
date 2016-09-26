@@ -21,7 +21,7 @@ class Channel extends AbstractApi
      */
     public function create($name,$usernames=array())
     {
-        $result = $this->post('v1/channels.create', ['name'=>$name, 'usernames' => $usernames]);
+        $result = $this->post('v1/channels.create', ['name'=>$name, 'members' => $usernames]);
 
         if ($this->status)
         {
@@ -30,4 +30,30 @@ class Channel extends AbstractApi
 
         return null;
     }
+
+    public function createBulk($rooms)
+    {
+	  $result = $this->post('bulk/createRoom', ['rooms' => $rooms]);
+
+	  if ($this->status)
+	  {
+	      return $result;
+	  }
+
+        return null;
+    }
+
+    public function sendMessage($room, $message)
+    {
+        $result = $this->post("rooms/{$room}/send", ['msg' => $message]);
+
+        if ($this->status)
+        {
+            return $result;
+        }
+
+        return null;
+
+    }
+    
 }
