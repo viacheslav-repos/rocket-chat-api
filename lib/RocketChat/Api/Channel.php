@@ -65,7 +65,18 @@ class Channel extends AbstractApi
      */
     public function setArchived($id, $state)
     {
-        return true;
+        if($state == true) {
+            $result = $this->post('room/'. $id .'/archive', []);
+        } else {
+            $result = $this->post('room/'. $id .'/unarchive', []);
+        }
+
+        if ($this->status)
+        {
+            return $result;
+        }
+
+        return null;
     }
 
     public function createBulk($rooms)
