@@ -78,6 +78,8 @@ class Client
      */
     private $curlOptions = array();
 
+    private $api_version;
+
     /**
      * Error strings if json is invalid.
      */
@@ -98,12 +100,13 @@ class Client
      * @param string $authToken
      * @param string|null $authUserId
      */
-    public function __construct($url, $authToken = null, $authUserId = null)
+    public function __construct($url, $authToken = null, $authUserId = null, $api_version = 'v1')
     {
         $this->url = $url;
         $this->getPort();
         $this->authToken = $authToken;
         $this->authUserId = $authUserId;
+        $this->api_version = $api_version;
     }
 
     /**
@@ -407,6 +410,12 @@ class Client
         $this->setCurlOption(CURLOPT_RETURNTRANSFER, 1);
 
         // Host and request options
+        
+        if (!preg_match( '/v\d+/' , $path))
+        {
+            $path = "{$this->api_version}/{$path}";
+        }
+
         $this->setCurlOption(CURLOPT_URL, $this->url.'api/'.$path);
         $this->setCurlOption(CURLOPT_PORT, $this->getPort());
         if (80 !== $this->getPort()) {
