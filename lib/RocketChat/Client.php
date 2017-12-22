@@ -93,6 +93,7 @@ class Client
     private $classes = array(
         'user' => 'User',
         'channel' => 'Channel',
+        'group' => 'Group',
     );
 
     /**
